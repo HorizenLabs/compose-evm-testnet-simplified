@@ -9,20 +9,11 @@ This project uses docker compose to spin up an evmapp node on Dune testnet.
 - pwgen
 
 ## Setup
-1. Populate the .env file starting from the .env.template:
-    ```shell
-    cp .env.template .env
-    ```
-2. Require the following environment variables form Horizen Labs support team: 
-    ```shell
-    SCNODE_NET_KNOWNPEERS=
-    SCNODE_NET_MAGICBYTES=
-    ```
-3. Set up environment variables in the .env 
+1. Set up environment variables in the .env 
     ```shell
     SCNODE_NET_NODENAME=
-    SCNODE_WALLET_GENESIS_SECRETS= # These can be left empty
     SCNODE_WALLET_SEED= # These can be left empty or use a random string
+    SCNODE_REST_PASSWORD= # Only if you are willing to set up authentication on the rest api endpoints ; in order to do that you also have to eventually decomment
     ```
 4. Run the following command to create the stack for the first time:
     ```shell
