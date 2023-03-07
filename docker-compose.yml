@@ -21,7 +21,7 @@ services:
     networks:
       - evmapp_network
     ports:
-      - 9545:9545
+      - "9545:9545"
       - "${SCNODE_NET_P2P_PORT}:${SCNODE_NET_P2P_PORT}"
     volumes:
       - "evmapp-1-data:/sidechain/datadir:rw"
@@ -48,11 +48,11 @@ services:
       - SCNODE_GENESIS_ISNONCEASING
       - SCNODE_NET_KNOWNPEERS
       - SCNODE_NET_MAGICBYTES
-      - "SCNODE_NET_NODENAME=${SCNODE_NET_NODENAME}"
-      - "SCNODE_NET_P2P_PORT=${SCNODE_NET_P2P_PORT}"
+      - SCNODE_NET_NODENAME
+      - SCNODE_NET_P2P_PORT
       - SCNODE_REST_PASSWORD
       - SCNODE_REST_PORT
-      - "SCNODE_WALLET_SEED=${SCNODE_WALLET_SEED}"
+      - SCNODE_WALLET_SEED
       - SCNODE_WALLET_MAXTX_FEE
     logging:
       driver: "json-file"
