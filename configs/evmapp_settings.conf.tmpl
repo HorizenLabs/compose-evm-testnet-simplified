@@ -10,8 +10,7 @@ sparkz {
     }
 
     restApi {
-        bindAddress = "0.0.0.0:$SCNODE_REST_PORT"
-        api-key-hash = ""
+        bindAddress = "0.0.0.0:9545"$SCNODE_REST_APIKEYHASH
         timeout = 5s
     }
 
@@ -21,25 +20,27 @@ sparkz {
         declaredAddress = "$SCNODE_NET_DECLAREDADDRESS:$SCNODE_NET_P2P_PORT"
         knownPeers = [$SCNODE_NET_KNOWNPEERS]
         agentName = "2-Hop"
-        magicBytes = $SCNODE_NET_MAGICBYTES
+        magicBytes = [$SCNODE_NET_MAGICBYTES]
     }
 
     websocket {
-        address = ""
+        address = "$WS_ADDRESS"
         connectionTimeout = 100 milliseconds
         reconnectionDelay = 60 seconds
         reconnectionMaxAttempts = 50
     }
 
     withdrawalEpochCertificate {
-        submitterIsEnabled = $SCNODE_CERT_SUBMITTER_ENABLED
-        certificateSigningIsEnabled = $SCNODE_CERT_SIGNING_ENABLED
+        submitterIsEnabled = false
+        certificateSigningIsEnabled = false
         signersPublicKeys = [$SCNODE_CERT_SIGNERS_PUBKEYS]
         signersThreshold = $SCNODE_CERT_SIGNERS_THRESHOLD
         signersSecrets = [$SCNODE_CERT_SIGNERS_SECRETS]
+        mastersPublicKeys = [$SCNODE_CERT_MASTERS_PUBKEYS]
         maxPks = $SCNODE_CERT_SIGNERS_MAXPKS
         certProvingKeyFilePath = "/sidechain/snark_keys/marlin_snark_pk"
         certVerificationKeyFilePath = "/sidechain/snark_keys/marlin_snark_vk"
+        circuitType = NaiveThresholdSignatureCircuitWithKeyRotation
         certificateAutomaticFeeComputation = true
     }
 
@@ -50,14 +51,14 @@ sparkz {
     }
 
     csw {
-        cswProvingKeyFilePath = "/sidechain/snark_keys/csw_marlin_snark_pk"
-        cswVerificationKeyFilePath = "/sidechain/snark_keys/csw_marlin_snark_vk"
+        cswProvingKeyFilePath = ""
+        cswVerificationKeyFilePath = ""
     }
 
     forger {
-        automaticForging = $SCNODE_FORGER_ENABLED
+        automaticForging = false
         restrictForgers = $SCNODE_FORGER_RESTRICT
-        allowedForgersList = [$SCNODE_FORGER_ALLOWED_FORGERS]
+        allowedForgersList = [$SCNODE_ALLOWED_FORGERS]
     }
 
     genesis {
@@ -66,6 +67,7 @@ sparkz {
         powData = "$SCNODE_GENESIS_POWDATA"
         mcBlockHeight = $SCNODE_GENESIS_MCBLOCKHEIGHT
         mcNetwork = $SCNODE_GENESIS_MCNETWORK
+        isNonCeasing = $SCNODE_GENESIS_ISNONCEASING
         withdrawalEpochLength = $SCNODE_GENESIS_WITHDRAWALEPOCHLENGTH
         initialCumulativeCommTreeHash = "$SCNODE_GENESIS_COMMTREEHASH"
     }
