@@ -11,9 +11,9 @@ This project uses docker compose to spin up an evmapp node on Dune testnet.
 ## Setup
 1. Set up environment variables in the .env 
     ```shell
-    SCNODE_NET_NODENAME= # This must be populated with a proper value
-    SCNODE_WALLET_SEED= # These can be left empty or use a random string
-    SCNODE_REST_PASSWORD= # Uncomment and set this variable only if you are willing to set up authentication on the rest api endpoints
+    SCNODE_NET_NODENAME= # This variable requires a name. Enter a name using characters, special characters, or numbers.
+    SCNODE_WALLET_SEED= # This variable can be empty or filled with a random string.
+    SCNODE_REST_PASSWORD= # Use this variable only to set up authentication on the rest api endpoints, where you have to uncomment.
     ```
 4. Run the following command to create the stack for the first time:
     ```shell
