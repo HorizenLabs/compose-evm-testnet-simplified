@@ -31,9 +31,16 @@ fi
 
 # detect external IPv4 address
 SCNODE_NET_DECLAREDADDRESS="$(dig -4 +short +time=2 @resolver1.opendns.com A myip.opendns.com | grep -v ";" || true)"
+
+# Using diff resolver
+if [ -z "${SCNODE_NET_DECLAREDADDRESS}" ]; then
+  SCNODE_NET_DECLAREDADDRESS="$(dig -4 +short +time=2 txt ch whoami.cloudflare @1.0.0.1 | tr -d '"' || true)"
+fi
+
+# Falling over to internal IP
 if [ -z "${SCNODE_NET_DECLAREDADDRESS}" ]; then
   echo "Error: Failed to detect external IPv4 address, using internal address."
-  SCNODE_NET_DECLAREDADDRESS="$(hostname -I)"
+  SCNODE_NET_DECLAREDADDRESS="$(hostname -I | cut -d ' ' -f1)"
   SCNODE_NET_DECLAREDADDRESS="${SCNODE_NET_DECLAREDADDRESS%% }"
 fi
 export SCNODE_NET_DECLAREDADDRESS
@@ -57,8 +64,11 @@ to_check=(
   "SCNODE_NET_MAGICBYTES"
   "SCNODE_NET_NODENAME"
   "SCNODE_NET_P2P_PORT"
+  "SCNODE_REST_PORT"
   "SCNODE_WALLET_SEED"
   "SCNODE_WALLET_MAXTX_FEE"
+  "SCNODE_WS_SERVER_PORT"
+  "SCNODE_WS_SERVER_ENABLED"
 )
 for var in "${to_check[@]}"; do
   if [ -z "${!var:-}" ]; then
@@ -80,7 +90,7 @@ fi
 # set REST API password hash
 SCNODE_REST_APIKEYHASH=""
 if [ -n "${SCNODE_REST_PASSWORD:-}" ]; then
-  SCNODE_REST_APIKEYHASH="$(echo -en "\n        apiKeyHash = \"$(htpasswd -nbBC 10 "" "${SCNODE_REST_PASSWORD}" | tr -d ':\n' | sed 's/$2y/$2a/')\"")"
+  SCNODE_REST_APIKEYHASH="$(echo -en "\n        apiKeyHash = \"$(htpasswd -nbBC 10 "" "${SCNODE_REST_PASSWORD}" | tr -d ':\n')\"")"
 fi
 export SCNODE_REST_APIKEYHASH
 
@@ -111,7 +121,7 @@ SUBST='$SCNODE_CERT_MASTERS_PUBKEYS:$SCNODE_CERT_SIGNERS_MAXPKS:$SCNODE_CERT_SIG
 '$SCNODE_GENESIS_BLOCKHEX:$SCNODE_GENESIS_SCID:$SCNODE_GENESIS_POWDATA:$SCNODE_GENESIS_MCBLOCKHEIGHT:$SCNODE_GENESIS_MCNETWORK:'\
 '$SCNODE_GENESIS_WITHDRAWALEPOCHLENGTH:$SCNODE_GENESIS_COMMTREEHASH:$SCNODE_GENESIS_ISNONCEASING:$SCNODE_ALLOWED_FORGERS:$SCNODE_FORGER_RESTRICT:'\
 '$SCNODE_NET_DECLAREDADDRESS:$SCNODE_NET_KNOWNPEERS:$SCNODE_NET_MAGICBYTES:$SCNODE_NET_NODENAME:$SCNODE_NET_P2P_PORT:$SCNODE_REST_APIKEYHASH:'\
-'$SCNODE_WALLET_GENESIS_SECRETS:$SCNODE_WALLET_MAXTX_FEE:$SCNODE_WALLET_SEED:$WS_ADDRESS:$MAX_INCOMING_CONNECTIONS:$MAX_OUTGOING_CONNECTIONS'
+'$SCNODE_WALLET_GENESIS_SECRETS:$SCNODE_WALLET_MAXTX_FEE:$SCNODE_WALLET_SEED:$WS_ADDRESS:$SCNODE_REST_PORT:$SCNODE_WS_SERVER_PORT:$SCNODE_WS_SERVER_ENABLED'
 export SUBST
 envsubst "${SUBST}" < /sidechain/config/sc_settings.conf.tmpl > /sidechain/config/sc_settings.conf
 unset SUBST
@@ -124,7 +134,7 @@ path_to_jemalloc="$(ldconfig -p | grep "$(arch)" | grep 'libjemalloc\.so\.2$' | 
 export LD_PRELOAD="${path_to_jemalloc}:${LD_PRELOAD}"
 
 if [ "${1}" = "/usr/bin/true" ]; then
-  set -- java -cp '/sidechain/'"${SC_JAR_NAME}"'-'"${SDK_VERSION}"'.jar:/sidechain/lib/*' $SC_MAIN_CLASS $SC_CONF_PATH
+  set -- java -cp '/sidechain/'"${SC_JAR_NAME}"'-'"${SC_VERSION}"'.jar:/sidechain/lib/*' "${SC_MAIN_CLASS}" "${SC_CONF_PATH}"
 fi
 
 echo "Username: ${USERNAME}, UID: ${CURRENT_UID}, GID: ${CURRENT_GID}"

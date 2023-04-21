@@ -5,12 +5,12 @@ sparkz {
     logInfo {
        logFileName = "debug.log"
        # levels (case insensitive): OFF, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL
-       logFileLevel = "all"
-       logConsoleLevel = "debug"
+       logFileLevel = "info"
+       logConsoleLevel = "info"
     }
 
     restApi {
-        bindAddress = "0.0.0.0:9545"$SCNODE_REST_APIKEYHASH
+        bindAddress = "0.0.0.0:$SCNODE_REST_PORT"$SCNODE_REST_APIKEYHASH
         timeout = 5s
     }
 
@@ -21,13 +21,21 @@ sparkz {
         knownPeers = [$SCNODE_NET_KNOWNPEERS]
         agentName = "2-Hop"
         magicBytes = [$SCNODE_NET_MAGICBYTES]
+        storageBackupInterval = 15m
+        storageBackupDelay = 5m
     }
 
-    websocket {
+    websocketClient {
+        enabled = false
         address = "$WS_ADDRESS"
         connectionTimeout = 100 milliseconds
         reconnectionDelay = 60 seconds
-        reconnectionMaxAttempts = 50
+        reconnectionMaxAttempts = 60
+    }
+
+    websocketServer {
+        wsServer = $SCNODE_WS_SERVER_ENABLED
+        wsServerPort = $SCNODE_WS_SERVER_PORT
     }
 
     withdrawalEpochCertificate {
