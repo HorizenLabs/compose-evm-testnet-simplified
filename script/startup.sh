@@ -35,7 +35,7 @@ fi
 
 
 ######
-# Node stop
+# Node start
 ######
 cd "${ROOT_DIR}"
 
