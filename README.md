@@ -1,37 +1,48 @@
 # Compose evm testnet
-This project uses docker compose to spin up an evmapp node on Dune testnet.
+This project uses docker compose project to spin up an evmapp node on Gobi testnet.
 
 ## Requirements
 - docker
 - docker compose v2
 - jq
-- bc
 - pwgen
 
 ## Setup
 1. Set up environment variables in the .env 
     ```shell
-    SCNODE_NET_NODENAME= # This variable requires a name. Enter a name using characters, special characters, or numbers.
-    SCNODE_WALLET_SEED= # This variable can be empty or filled with a random string.
-    SCNODE_REST_PASSWORD= # Use this variable only to set up authentication on the rest api endpoints, where you have to uncomment.
+    SCNODE_REST_PASSWORD= # Uncomment and set this variable only if you are willing to set up authentication on the rest api endpoints
     ```
-4. Run the following command to create the stack for the first time:
+2. Run the following command to initialize and run the stack for the first time:
     ```shell
     ./scripts/init.sh
     ```
-5. Run the following command to stop the stack:
+3. Run the following command to stop the stack:
     ```shell
     ./scripts/shutdown.sh
     ```
-6. Run the following command to destroy the stack, **this action will delete your wallet and all the data**:
+4. Run the following command to start the stack after it was stopped:
+    ```shell
+    ./scripts/startup.sh
+    ```
+5. Run the following command to destroy the stack, **this action will delete your wallet and all the data**:
     ```shell
     ./scripts/clean.sh
     ```
-   
+
 ## Usage
 The evmapp node RPC interfaces will be available over HTTP at:
 - http://localhost:9545/
 
+   For example:
+   ```
+   curl -sX POST -H 'accept: application/json' -H 'Content-Type: application/json' "http://127.0.0.1:9545/block/best"
+   ```
+
 The Ethereum RPC interface is available at /ethv1:
-- http://localhost:9545/ethv1.
+- http://localhost:9545/ethv1
+
+   For example:
+   ```
+   curl -sX POST -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"jsonrpc":"2.0","method":"eth_gasPrice","params":[],"id":1}' "http://127.0.0.1:9545/ethv1"
+   ```
 

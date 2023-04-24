@@ -1,32 +1,33 @@
 version: "3"
 
 volumes:
-  evmapp-1-data:
-  evmapp-snark-keys:
+  data:
+  snark-keys:
 
 networks:
   evmapp_network:
 
 services:
-  evm-app:
-    image: zencash/evmapp:${SDK_COMMITTISH_EVMAPP}
-    container_name: evmapp-1
+  evmapp:
+    image: zencash/evmapp:${SC_COMMITTISH_EVMAPP}
+    container_name: evmapp
     restart: always
     build:
       context: ./configs
       dockerfile: Dockerfile
       args:
-        - "ARG_SDK_VERSION=${SDK_VERSION_EVMAPP}"
-        - "SDK_COMMITTISH=${SDK_COMMITTISH_EVMAPP}"
+        - "ARG_SC_GITHUB_REPO=${SC_GITHUB_REPO_EVMAPP}"
+        - "ARG_SC_VERSION=${SC_VERSION_EVMAPP}"
+        - "ARG_SC_COMMITTISH=${SC_COMMITTISH_EVMAPP}"
     networks:
       - evmapp_network
     ports:
-      - "9545:9545"
+      - "127.0.0.1:${SCNODE_REST_PORT}:${SCNODE_REST_PORT}"
       - "${SCNODE_NET_P2P_PORT}:${SCNODE_NET_P2P_PORT}"
     volumes:
-      - "evmapp-1-data:/sidechain/datadir:rw"
-      - "evmapp-snark-keys:/sidechain/snark_keys:rw"
-      - "./logs/evmapp-1:/sidechain/logs:rw"
+      - "data:/sidechain/datadir:rw"
+      - "snark-keys:/sidechain/snark_keys:rw"
+      - "./logs/evmapp:/sidechain/logs:rw"
       - "./configs/evmapp_settings.conf.tmpl:/sidechain/config/sc_settings.conf.tmpl:ro"
     environment:
       - "LOCAL_GRP_ID=${SCNODE_GRP_ID}"
@@ -54,6 +55,8 @@ services:
       - SCNODE_REST_PORT
       - SCNODE_WALLET_SEED
       - SCNODE_WALLET_MAXTX_FEE
+      - SCNODE_WS_SERVER_PORT
+      - SCNODE_WS_SERVER_ENABLED
     logging:
       driver: "json-file"
       options:
