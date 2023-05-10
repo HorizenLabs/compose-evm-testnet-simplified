@@ -34,7 +34,7 @@ SCNODE_NET_DECLAREDADDRESS="$(dig -4 +short +time=2 @resolver1.opendns.com A myi
 
 # Using diff resolver
 if [ -z "${SCNODE_NET_DECLAREDADDRESS}" ]; then
-  SCNODE_NET_DECLAREDADDRESS="$(dig -4 +short +time=2 txt ch whoami.cloudflare @1.0.0.1 | tr -d '"' || true)"
+  SCNODE_NET_DECLAREDADDRESS="$(curl -s ifconfig.me/ip || true)"
 fi
 
 # Falling over to internal IP
