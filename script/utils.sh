@@ -15,7 +15,7 @@ fn_die() {
 
 have_pwgen () {
   [ "${1:-}" = "usage" ] && return
-  command -v bc &> /dev/null || { echo "${FUNCNAME[0]} error: 'pwgen' is required to run this script, install with 'sudo apt-get install pwgen'."; exit 1; }
+  command -v pwgen &> /dev/null || { echo "${FUNCNAME[0]} error: 'pwgen' is required to run this script, install with 'sudo apt-get install pwgen'."; exit 1; }
 }
 
 have_docker () {
