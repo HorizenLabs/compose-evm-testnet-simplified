@@ -29,7 +29,7 @@ This project uses docker compose project to spin up an evmapp node on Gobi testn
     ```shell
     sudo apt-get install dos2unix
     ```
-7. Navigate to the Script folder and change line endings to Unix for all files:
+7. Within each directory: `compose-evm-testnet-simplified`, `configs`, `script` change line endings to Unix:
     ```shell
     dos2unix -v *
     ```
