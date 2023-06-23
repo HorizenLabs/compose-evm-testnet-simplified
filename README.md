@@ -7,6 +7,34 @@ This project uses docker compose project to spin up an evmapp node on Gobi testn
 - jq
 - pwgen
 
+## Setup - Windows
+1. Install WSL by running this command in the terminal:
+    ```shell
+    wsl --install
+    ```
+2. Install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+3. In Docker Desktop ensure WSL backend and Ubuntu are enabled
+    1. Open Settings > WSL Integration
+    2. Enable integration with my default WSL distro
+    3. Enable Ubuntu toggle
+4. Open WSL in the terminal
+    ```shell
+    wsl
+    ```
+5. Install `pwgen`
+    ```shell
+    sudo apt-get install pwgen
+    ```
+6. Install `dos2unix`
+    ```shell
+    sudo apt-get install dos2unix
+    ```
+7. Navigate to the Script folder and change line endings to Unix for all files:
+    ```shell
+    dos2unix -v *
+    ```
+8. Continue with Setup.
+
 ## Setup
 1. Set up environment variables in the .env 
     ```shell
@@ -14,19 +42,19 @@ This project uses docker compose project to spin up an evmapp node on Gobi testn
     ```
 2. Run the following command to initialize and run the stack for the first time:
     ```shell
-    ./scripts/init.sh
+    ./script/init.sh
     ```
 3. Run the following command to stop the stack:
     ```shell
-    ./scripts/shutdown.sh
+    ./script/shutdown.sh
     ```
 4. Run the following command to start the stack after it was stopped:
     ```shell
-    ./scripts/startup.sh
+    ./script/startup.sh
     ```
 5. Run the following command to destroy the stack, **this action will delete your wallet and all the data**:
     ```shell
-    ./scripts/clean.sh
+    ./script/clean.sh
     ```
 
 ## Usage
